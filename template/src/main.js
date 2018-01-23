@@ -7,6 +7,7 @@ import App from './App'
 {{#router}}
 import router from './router'
 {{/router}}
+import store from './vuex/'
 import Rem from './plugins/Rem'
 Vue.use(Rem);
 Vue.config.productionTip = false
@@ -17,6 +18,7 @@ new Vue({
   {{#router}}
   router,
   {{/router}}
+  store,
   {{#if_eq build "runtime"}}
   render: h => h(App)
   {{/if_eq}}
