@@ -1,0 +1,10 @@
+//宽高
+@mixin widthHeight($width,$height){
+    width: $width;
+    height: $height;
+}
+//字体大小，颜色
+@mixin sizeColor($size, $color){
+    font-size: $size;
+    color: $color;
+}

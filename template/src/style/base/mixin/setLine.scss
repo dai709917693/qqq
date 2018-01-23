@@ -1,0 +1,32 @@
+@mixin setTopLine ($padding:(14rem/$base_fontSize),$c:#ddd) {
+  content: " ";
+  position: absolute;
+  left: $padding;
+  right: $padding;
+  top: 0;
+  border-top: 1px solid $c;
+}
+@mixin setBottomLine ($padding:(14rem/$base_fontSize),$c:#ddd) {
+  content: " ";
+  position: absolute;
+  left: $padding;
+  right: $padding;
+  bottom: 0;
+  border-top: 1px solid $c;
+}
+@mixin setRightLine ($padding:(14rem/$base_fontSize),$c:#ddd) {
+  content: " ";
+  position: absolute;
+  top: $padding;
+  bottom: $padding;
+  right: 0;
+  border-right: 1px solid $c;
+}
+@mixin setLeftLine ($padding:(14rem/$base_fontSize),$c:#ddd) {
+  content: " ";
+  position: absolute;
+  top: $padding;
+  bottom: $padding;
+  left: 0;
+  border-right: 1px solid $c;
+}

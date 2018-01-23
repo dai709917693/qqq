@@ -26,7 +26,11 @@
   },
   "dependencies": {
     "vue": "^2.5.2"{{#router}},
-    "vue-router": "^3.0.1"{{/router}}
+    "vue-router": "^3.0.1"{{/router}},
+    "axios": "^0.17.1",
+    "ua-device": "^0.1.10",
+    "vue-loading-template": "^0.1.7",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     {{#lint}}
@@ -116,7 +120,9 @@
     "portfinder": "^1.0.13",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.9.1",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "^4.1.0",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.6"
   },
   "engines": {
     "node": ">= 6.0.0",
