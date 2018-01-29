@@ -9,6 +9,7 @@ import router from './router'
 {{/router}}
 import store from './vuex/'
 import Rem from './plugins/Rem'
+import '@/style/reset.css'
 Vue.use(Rem);
 Vue.config.productionTip = false
 
