@@ -1,0 +1,15 @@
+[
+{
+  "url": "a.dox",
+  "method": "get"
+},
+{
+  "name": "PB",
+  "url": "b.dox",
+  "method": "post"
+},
+{
+  "name": "GC",
+  "url": "c.dox",
+  "method": "get"
+}]

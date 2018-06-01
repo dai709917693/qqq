@@ -1,0 +1,42 @@
+[
+{
+  "name": "home",
+  "children": [
+  {
+    "base": "index.vue"
+  },
+  {
+    "name": "list",
+    "children": [
+    {
+      "base": "list.vue"
+    },
+    {
+      "base": "detail.vue"
+    }]
+  }]
+},
+{
+  "name": "childA",
+  "children": [
+  {
+    "name": "index",
+    "ext": ".vue"
+  },
+  {
+    "name": "list",
+    "ext": ".vue"
+  }]
+},
+{
+  "name": "childB",
+  "children": [
+  {
+    "name": "index",
+    "ext": ".vue"
+  },
+  {
+    "name": "list",
+    "ext": ".vue"
+  }]
+}]
