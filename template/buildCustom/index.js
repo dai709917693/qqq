@@ -8,7 +8,7 @@ const pagesConfig = path.resolve(__dirname, './config/pages.json');
 const initAjax = require('./template/ajax')
 const initPages = require('./template/pages');
 const initVuex = require('./template/vuex');
-const vueTpl = fs.readFileSync('./template/tpl.vue', { encoding: 'utf8' });
+const vueTpl = fs.readFileSync(path.resolve(__dirname, 'template/tpl.vue'), { encoding: 'utf8' });
 //初始化ajax目录
 !fs.existsSync(config.ajaxSrc) && fs.mkdirSync(config.ajaxSrc);
 //初始化pages目录
