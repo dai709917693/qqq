@@ -132,11 +132,11 @@
 
 /*left*/
 .slide_left-enter-active {
-  transition: transform .5s ease;
+  transition: transform .3s ease;
 }
 
 .slide_left-leave-active {
-  transition: transform .5s ease;
+  transition: transform .3s ease;
 }
 
 .slide_left-enter {
@@ -149,11 +149,11 @@
 
 /*right*/
 .slide_right-enter-active {
-  transition: transform .5s ease;
+  transition: transform .3s ease;
 }
 
 .slide_right-leave-active {
-  transition: transform .5s ease;
+  transition: transform .3s ease;
 }
 
 .slide_right-enter {

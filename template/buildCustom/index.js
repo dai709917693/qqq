@@ -35,15 +35,17 @@ const readdir = (dir) => {
 }
 //console.log(JSON.stringify(readdir(config.pagesSrc)))
 //fs.writeFileSync(watcherDir, JSON.stringify(readdir('./config')))
+let data;
+let dataObj;
 switch (process.argv.splice(2)[0]) {
   case 'ajax':
-    let data = fs.readFileSync(ajaxConfig, { encoding: 'utf8' });
-    let dataObj = JSON.parse(data);
+    data = fs.readFileSync(ajaxConfig, { encoding: 'utf8' });
+    dataObj = JSON.parse(data);
     initAjax(dataObj, config.ajaxSrc);
     break;
   case 'pages':
-    let data = fs.readFileSync(pagesConfig, { encoding: 'utf8' });
-    let dataObj = JSON.parse(data);
+    data = fs.readFileSync(pagesConfig, { encoding: 'utf8' });
+    dataObj = JSON.parse(data);
     initPages(dataObj, config.pagesSrc, vueTpl);
     initVuex(dataObj, config.vuexSrc)
     break;
