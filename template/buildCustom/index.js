@@ -8,7 +8,8 @@ const pagesConfig = path.resolve(__dirname, './config/pages.json');
 const initAjax = require('./template/ajax')
 const initPages = require('./template/pages');
 const initVuex = require('./template/vuex');
-const vueTpl = fs.readFileSync(path.resolve(__dirname, 'template/tpl.vue'), { encoding: 'utf8' });
+
+const vueTpl = fs.readFileSync(path.resolve(__dirname, './template/tpl.vue'), { encoding: 'utf8' });
 //初始化ajax目录
 !fs.existsSync(config.ajaxSrc) && fs.mkdirSync(config.ajaxSrc);
 //初始化pages目录
@@ -35,18 +36,22 @@ const readdir = (dir) => {
 }
 //console.log(JSON.stringify(readdir(config.pagesSrc)))
 //fs.writeFileSync(watcherDir, JSON.stringify(readdir('./config')))
-let data;
-let dataObj;
+let ajaxData;
+let ajaxDataObj;
+let pagesData;
+let pagesDataObj;
+ajaxData = fs.readFileSync(ajaxConfig, { encoding: 'utf8' });
+ajaxDataObj = JSON.parse(ajaxData);
+pagesData = fs.readFileSync(pagesConfig, { encoding: 'utf8' });
+pagesDataObj = JSON.parse(pagesData);
 switch (process.argv.splice(2)[0]) {
   case 'ajax':
-    data = fs.readFileSync(ajaxConfig, { encoding: 'utf8' });
-    dataObj = JSON.parse(data);
-    initAjax(dataObj, config.ajaxSrc);
+    initAjax(ajaxDataObj, config.ajaxSrc);
     break;
   case 'pages':
-    data = fs.readFileSync(pagesConfig, { encoding: 'utf8' });
-    dataObj = JSON.parse(data);
-    initPages(dataObj, config.pagesSrc, vueTpl);
-    initVuex(dataObj, config.vuexSrc)
+    initPages(pagesDataObj, config.pagesSrc, vueTpl);
+    initVuex(pagesDataObj, ajaxDataObj, config.vuexSrc)
     break;
+  case 'vuex':
+    initVuex(pagesDataObj, ajaxDataObj, config.vuexSrc)
 }

@@ -5,11 +5,17 @@ const reqLocalItem = require('./requestLocalItem.js');
 const reqName = 'sendRes';
 const dataFilename = 'DataLocal';
 module.exports = (data, folderAdd) => {
-  let reqLocalCont = `const ${reqName} = (res) => {
+  let reqLocalAdd = path.resolve(folderAdd, 'requestLocal.js');
+  let reqLocalCont = "";
+  if (fs.existsSync(reqLocalAdd)) {
+    reqLocalCont = fs.readFileSync(reqLocalAdd, { encoding: 'utf8' });
+  } else {
+    reqLocalCont = `const ${reqName} = (res) => {
   return new Promise((resolve, reject) => {
     resolve(res)
   })
 };\n`;
+  }
   data.forEach((value) => {
     let ajaxName;
     if (value.name) {
@@ -18,8 +24,10 @@ module.exports = (data, folderAdd) => {
       let urlPath = url.parse(value.url).pathname;
       ajaxName = path.parse(urlPath).name.toLocaleUpperCase();
     }
-    reqLocalCont += reqLocalItem(ajaxName, reqName, dataFilename)
+    if (reqLocalCont.indexOf(ajaxName) == -1) {
+      reqLocalCont += reqLocalItem(ajaxName, reqName, dataFilename)
+    }
   });
-  let reqLocalAdd = path.resolve(folderAdd, 'requestLocal.js');
-  !fs.existsSync(reqLocalAdd) && fs.writeFileSync(reqLocalAdd, reqLocalCont);
+
+  fs.writeFileSync(reqLocalAdd, reqLocalCont);
 }

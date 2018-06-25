@@ -4,12 +4,15 @@ const url = require('url');
 const initReq = require('./request');
 const initReqLocal = require('./requestLocal');
 const initDataLocal = require('./DataLocal');
+
+var Handlebars = require('handlebars');
 const initIndex = (ajaxListCont, folderAdd) => {
-  let indexCont = `import {\n${ajaxListCont}\n} from './request';
-/*import {\n${ajaxListCont}\n} from './requestLocal';*/
-export {\n${ajaxListCont}\n}`;
+  let indexCont = `import {\n{{#each list}}\t{{this}},\n{{/each}}\n} from './request';
+/*import {\n{{#each list}}\t{{this}},\n{{/each}}\n} from './requestLocal';*/
+export {\n{{#each list}}\t{{this}},\n{{/each}}\n}`;
+  let template = Handlebars.compile(indexCont);
   let indexAdd = path.resolve(folderAdd, 'index.js');
-  !fs.existsSync(indexAdd) && fs.writeFileSync(indexAdd, indexCont);
+  fs.writeFileSync(indexAdd, template(ajaxListCont));
 }
 module.exports = (data, folderAdd) => {
   //初始化DataLocal
@@ -28,8 +31,8 @@ module.exports = (data, folderAdd) => {
     //创建data文件
     initDataLocal(ajaxName, dataLocalAdd);
   });
-  let ajaxListCont = ajaxList.join(', \n');
-  initIndex(ajaxListCont, folderAdd);
+
+  initIndex({ list: ajaxList }, folderAdd);
   initReq(data, folderAdd);
   initReqLocal(data, folderAdd);
 }

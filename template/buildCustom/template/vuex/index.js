@@ -17,7 +17,7 @@ const mutations = {}
 const actions = {}
 export default new Vuex.Store({
   modules: {
-  ${modules.join(', ')}
+    ${modules.join(', ')}
   },
   state,
   actions,
@@ -26,21 +26,29 @@ export default new Vuex.Store({
   let indexAdd = path.resolve(folderAdd, 'index.js');
   !fs.existsSync(indexAdd) && fs.writeFileSync(indexAdd, indexCont);
 }
-module.exports = (data, folderAdd) => {
+module.exports = (pagesData, ajaxData, folderAdd) => {
   //初始化modules目录
   let modulesAdd = path.resolve(folderAdd, 'modules');
   !fs.existsSync(modulesAdd) && fs.mkdirSync(modulesAdd);
+  //遍历ajax配置，分类属于的模块
+  let ajaxModules = {};
+  ajaxData.forEach((aVal) => {
+    if (aVal.vuex) {
+      !ajaxModules[aVal.vuex] && (ajaxModules[aVal.vuex] = []);
+      ajaxModules[aVal.vuex].push(aVal.name)
+    }
+  })
   let modules = [];
-  data.forEach((value) => {
+  pagesData.forEach((value) => {
     if (_.isUndefined(value.base)) {
       value.base = value.name + (value.ext ? value.ext : '')
     }
     let pathObj = path.parse(value.base);
     modules.push(pathObj.name);
     //创建modules
-    initModule(pathObj.name, modulesAdd)
+    initModule(pathObj.name, ajaxModules[pathObj.name], modulesAdd)
   });
   initIndex(modules, folderAdd);
-  initAction(folderAdd);
+  initAction(ajaxModules, folderAdd);
   initMutation(folderAdd);
 }
