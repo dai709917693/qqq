@@ -3,13 +3,13 @@
   "name": "home",
   "children": [
   {
-    "base": "index.vue"
+    "base": "home.vue"
   },
   {
     "name": "list",
     "children": [
     {
-      "base": "list.vue"
+      "base": "listHome.vue"
     },
     {
       "base": "detail.vue"
@@ -20,11 +20,11 @@
   "name": "childA",
   "children": [
   {
-    "name": "index",
+    "name": "indexA",
     "ext": ".vue"
   },
   {
-    "name": "list",
+    "name": "listA",
     "ext": ".vue"
   }]
 },
@@ -32,11 +32,11 @@
   "name": "childB",
   "children": [
   {
-    "name": "index",
+    "name": "indexB",
     "ext": ".vue"
   },
   {
-    "name": "list",
+    "name": "listB",
     "ext": ".vue"
   }]
 }]

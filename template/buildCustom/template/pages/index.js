@@ -9,13 +9,13 @@ const writeIndexFile = (original, isChild) => {
   let str = '';
   original.forEach((v) => {
     if (_.isObject(v)) {
-      let subfile = writeIndexFile(v.children, true);
-      if (isChild) {
-        res = res.concat(subfile)
-      } else {
-        res = res.concat(subfile)
-        str += `import { ${subfile.join(', ')} } from './${v.name}';\n`
-      }
+      // let subfile = writeIndexFile(v.children, true);
+      // if (isChild) {
+      //   res = res.concat(subfile)
+      // } else {
+      //   res = res.concat(subfile)
+      //   str += `import { ${subfile.join(', ')} } from './${v.name}';\n`
+      // }
     } else {
       if (isChild) {
         res.push(v)
@@ -31,7 +31,11 @@ const writeIndexFile = (original, isChild) => {
     return { indexCont: `${str}export { ${res.join(', ')} }`, exportArr: res }
   }
 }
-const queryDir = (arr, dir, vueTpl, init) => {
+/*
+init：第一次遍历，
+parent：父元素路由地址
+ */
+const queryDir = (arr, dir, vueTpl, parent, init) => {
   let routerImp = "";
   let routeCont = "";
   let resArr = []
@@ -48,7 +52,7 @@ const queryDir = (arr, dir, vueTpl, init) => {
       if (init) {
         routerImp += `import ${pathObj.name} from '@/pages/${pathObj.name}';\n`
         routeCont += `,{
-    path: '/${pathObj.name}',
+    path: '${parent}${pathObj.name}',
     name: '${pathObj.name}',
     component: ${pathObj.name}
   }`
@@ -58,27 +62,25 @@ const queryDir = (arr, dir, vueTpl, init) => {
       let indexFilePath = path.resolve(address, 'index.js');
 
       !fileExists && fs.mkdirSync(address);
-      let childArr = queryDir(value.children, address, vueTpl).childArr;
-      let indexContent = writeIndexFile(childArr);
-
-      if (init) {
-        routerImp += `import { ${indexContent.exportArr.join(', ')} } from '@/pages/${pathObj.name}';\n`
-        indexContent.exportArr.forEach((v) => {
-          routeCont += `, {
-    path: '/${v}',
+      let childArr = queryDir(value.children, address, vueTpl, `${parent}${pathObj.name}/`);
+      let indexContent = writeIndexFile(childArr.childArr);
+      routerImp += `import { ${indexContent.exportArr.join(', ')} } from '@/pages${parent}${pathObj.name}';\n`
+      indexContent.exportArr.forEach((v) => {
+        routeCont += `, {
+    path: '${parent}${v}',
     name: '${v}',
     component: ${v}
   }`
-        })
-      };
-
+      });
+      routerImp += childArr.routerImp;
+      routeCont += childArr.routeCont;
       !fs.existsSync(indexFilePath) && fs.writeFileSync(indexFilePath, indexContent.indexCont);
-      resArr.push({ name: pathObj.name, children: childArr })
+      resArr.push({ name: pathObj.name, children: childArr.childArr })
     }
   })
   return { childArr: resArr, routerImp: routerImp, routeCont: routeCont }
 }
-module.exports = (arr, pagesDir, routerDir, vueTpl) => {
-  let resQuery = queryDir(arr, pagesDir, vueTpl, true)
-  initRouter(routerDir,resQuery)
+module.exports = (pagesArr, pagesDir, routerArr, routerDir, vueTpl) => {
+  let resQuery = queryDir(pagesArr, pagesDir, vueTpl, '/', true)
+  initRouter(routerArr, routerDir, resQuery)
 }
