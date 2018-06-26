@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 var _ = require('lodash/core');
 var fp = require('lodash/fp');
+const initRouter = require('./router');
 //返回index.js内容
 const writeIndexFile = (original, isChild) => {
   let res = []
@@ -27,10 +28,12 @@ const writeIndexFile = (original, isChild) => {
   if (isChild) {
     return res
   } else {
-    return `${str}export { ${res.join(', ')} }`
+    return { indexCont: `${str}export { ${res.join(', ')} }`, exportArr: res }
   }
 }
-const queryDir = (arr, dir, vueTpl) => {
+const queryDir = (arr, dir, vueTpl, init) => {
+  let routerImp = "";
+  let routeCont = "";
   let resArr = []
   _.isArray(arr) && arr.forEach((value) => {
     if (_.isUndefined(value.base)) {
@@ -42,17 +45,40 @@ const queryDir = (arr, dir, vueTpl) => {
     if (pathObj.ext) {
       let cont = pathObj.ext == '.vue' ? vueTpl : '';
       resArr.push(pathObj.name);
+      if (init) {
+        routerImp += `import ${pathObj.name} from '@/pages/${pathObj.name}';\n`
+        routeCont += `,{
+    path: '/${pathObj.name}',
+    name: '${pathObj.name}',
+    component: ${pathObj.name}
+  }`
+      };
       !fileExists && fs.writeFileSync(address, cont)
     } else {
       let indexFilePath = path.resolve(address, 'index.js');
-      !fileExists && fs.mkdirSync(address);
-      let childArr = queryDir(value.children, address, vueTpl);
 
+      !fileExists && fs.mkdirSync(address);
+      let childArr = queryDir(value.children, address, vueTpl).childArr;
       let indexContent = writeIndexFile(childArr);
-      !fs.existsSync(indexFilePath) && fs.writeFileSync(indexFilePath, indexContent);
+
+      if (init) {
+        routerImp += `import { ${indexContent.exportArr.join(', ')} } from '@/pages/${pathObj.name}';\n`
+        indexContent.exportArr.forEach((v) => {
+          routeCont += `, {
+    path: '/${v}',
+    name: '${v}',
+    component: ${v}
+  }`
+        })
+      };
+
+      !fs.existsSync(indexFilePath) && fs.writeFileSync(indexFilePath, indexContent.indexCont);
       resArr.push({ name: pathObj.name, children: childArr })
     }
   })
-  return resArr
+  return { childArr: resArr, routerImp: routerImp, routeCont: routeCont }
 }
-module.exports = queryDir
+module.exports = (arr, pagesDir, routerDir, vueTpl) => {
+  let resQuery = queryDir(arr, pagesDir, vueTpl, true)
+  initRouter(routerDir,resQuery)
+}

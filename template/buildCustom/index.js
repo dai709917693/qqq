@@ -3,7 +3,7 @@ const path = require('path');
 const config = require('./config');
 
 const ajaxConfig = path.resolve(__dirname, './config/ajax.json');
-const pagesConfig = path.resolve(__dirname, './config/pages.json');
+const pagesConfig = path.resolve(__dirname, '../config/pages.json');
 
 const initAjax = require('./template/ajax')
 const initPages = require('./template/pages');
@@ -16,6 +16,8 @@ const vueTpl = fs.readFileSync(path.resolve(__dirname, './template/tpl.vue'), { 
 !fs.existsSync(config.pagesSrc) && fs.mkdirSync(config.pagesSrc);
 //初始化vuex目录
 !fs.existsSync(config.vuexSrc) && fs.mkdirSync(config.vuexSrc);
+//初始化router目录
+!fs.existsSync(config.routerSrc) && fs.mkdirSync(config.routerSrc);
 
 const readdir = (dir) => {
   let obj = {}
@@ -49,7 +51,7 @@ switch (process.argv.splice(2)[0]) {
     initAjax(ajaxDataObj, config.ajaxSrc);
     break;
   case 'pages':
-    initPages(pagesDataObj, config.pagesSrc, vueTpl);
+    initPages(pagesDataObj, config.pagesSrc, config.routerSrc, vueTpl);
     initVuex(pagesDataObj, ajaxDataObj, config.vuexSrc)
     break;
   case 'vuex':
