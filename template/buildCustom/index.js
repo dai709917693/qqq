@@ -3,7 +3,8 @@ const path = require('path');
 const config = require('./config');
 
 const ajaxConfig = path.resolve(__dirname, './config/ajax.json');
-const pagesConfig = path.resolve(__dirname, '../config/pages.json');
+const pagesConfig = path.resolve(__dirname, './config/pages.json');
+const routerConfig = path.resolve(__dirname, './config/router.json');
 
 const initAjax = require('./template/ajax')
 const initPages = require('./template/pages');
@@ -42,16 +43,20 @@ let ajaxData;
 let ajaxDataObj;
 let pagesData;
 let pagesDataObj;
+let routerData;
+let routerDataObj;
 ajaxData = fs.readFileSync(ajaxConfig, { encoding: 'utf8' });
 ajaxDataObj = JSON.parse(ajaxData);
 pagesData = fs.readFileSync(pagesConfig, { encoding: 'utf8' });
 pagesDataObj = JSON.parse(pagesData);
+routerData = fs.readFileSync(routerConfig, { encoding: 'utf8' });
+routerDataObj = JSON.parse(routerData);
 switch (process.argv.splice(2)[0]) {
   case 'ajax':
     initAjax(ajaxDataObj, config.ajaxSrc);
     break;
   case 'pages':
-    initPages(pagesDataObj, config.pagesSrc, config.routerSrc, vueTpl);
+    initPages(pagesDataObj, config.pagesSrc, routerDataObj, config.routerSrc, vueTpl);
     initVuex(pagesDataObj, ajaxDataObj, config.vuexSrc)
     break;
   case 'vuex':

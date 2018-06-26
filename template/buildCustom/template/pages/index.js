@@ -74,7 +74,7 @@ const queryDir = (arr, dir, vueTpl, parent, init) => {
       });
       routerImp += childArr.routerImp;
       routeCont += childArr.routeCont;
-      !fs.existsSync(indexFilePath) && fs.writeFileSync(indexFilePath, indexContent.indexCont);
+      fs.writeFileSync(indexFilePath, indexContent.indexCont);
       resArr.push({ name: pathObj.name, children: childArr.childArr })
     }
   })
