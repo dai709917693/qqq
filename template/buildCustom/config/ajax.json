@@ -1,15 +1,19 @@
 [
 {
+  "name": "GA",
   "url": "a.dox",
-  "method": "get"
+  "method": "get",
+  "vuex": "home"
 },
 {
   "name": "PB",
   "url": "b.dox",
-  "method": "post"
+  "method": "post",
+  "vuex": "home"
 },
 {
   "name": "GC",
   "url": "c.dox",
-  "method": "get"
+  "method": "get",
+  "vuex": "home"
 }]
