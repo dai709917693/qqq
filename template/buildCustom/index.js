@@ -24,14 +24,14 @@ const readdir = (dir) => {
   let obj = {}
   let files = fs.readdirSync(dir);
   obj.name = path.parse(dir).name;
-  obj.dir = []
+  obj.children = []
   files.forEach((v) => {
     let subPath = path.resolve(dir, v);
     let subStat = fs.statSync(subPath);
     if (subStat.isDirectory()) {
-      obj.dir.push(readdir(subPath))
+      obj.children.push(readdir(subPath))
     } else {
-      obj.dir.push(v)
+      v != 'index.js' && obj.children.push({ base: v })
     }
 
   })
@@ -58,6 +58,11 @@ switch (process.argv.splice(2)[0]) {
   case 'pages':
     initPages(pagesDataObj, config.pagesSrc, routerDataObj, config.routerSrc, vueTpl);
     initVuex(pagesDataObj, ajaxDataObj, config.vuexSrc)
+    let newPagesDataObj = readdir(config.pagesSrc).children;
+    //重写pages.json配置
+    fs.writeFileSync(pagesConfig, JSON.stringify(newPagesDataObj))
+    initPages(newPagesDataObj, config.pagesSrc, routerDataObj, config.routerSrc, vueTpl);
+    initVuex(newPagesDataObj, ajaxDataObj, config.vuexSrc)
     break;
   case 'vuex':
     initVuex(pagesDataObj, ajaxDataObj, config.vuexSrc)

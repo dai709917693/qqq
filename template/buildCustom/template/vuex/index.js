@@ -5,13 +5,28 @@ var fp = require('lodash/fp');
 const initModule = require('./module');
 const initAction = require('./action');
 const initMutation = require('./mutation');
-
-const initIndex = (modules, folderAdd) => {
-  let indexCont = `import Vue from 'vue';\nimport Vuex from 'vuex';\n`;
+const queryData = require('../../util/queryData')
+const modifyIndex = (indexCont, modules) => {
+  let exportIndex = indexCont.indexOf('export');
+  let partImp = indexCont.substring(0, exportIndex);
+  let partExport = indexCont.substring(exportIndex);
+  let exportCont = ""
   modules.forEach((value) => {
-    indexCont += `import ${value} from './modules/${value}';\n`;
+    if (indexCont.indexOf(`modules/${value}`) == -1) {
+      partImp += `import ${value} from './modules/${value}';\n`;
+      exportCont += `\n    ${value}, `
+    }
   })
-  indexCont += `Vue.use(Vuex)
+  let modulesIndex = partExport.indexOf('modules:');
+  partExport = queryData(partExport, exportCont, modulesIndex, true)
+  return partImp + partExport
+}
+const defaultIndex = (indexCont, modules) => {
+  let cont = ''
+  modules.forEach((value) => {
+    cont += `import ${value} from './modules/${value}';\n`;
+  })
+  cont += `Vue.use(Vuex)
 const state = {}
 const mutations = {}
 const actions = {}
@@ -23,8 +38,20 @@ export default new Vuex.Store({
   actions,
   mutations
 })`;
+  return indexCont + cont
+}
+const initIndex = (modules, folderAdd) => {
+  let indexCont = '';
   let indexAdd = path.resolve(folderAdd, 'index.js');
-  !fs.existsSync(indexAdd) && fs.writeFileSync(indexAdd, indexCont);
+  //检查旧内容
+  if (fs.existsSync(indexAdd)) {
+    indexCont = fs.readFileSync(indexAdd, { encoding: 'utf8' });
+    indexCont = modifyIndex(indexCont, modules)
+  } else {
+    indexCont = `import Vue from 'vue';\nimport Vuex from 'vuex';\n`;
+    indexCont = defaultIndex(indexCont, modules)
+  }
+  fs.writeFileSync(indexAdd, indexCont);
 }
 module.exports = (pagesData, ajaxData, folderAdd) => {
   //初始化modules目录

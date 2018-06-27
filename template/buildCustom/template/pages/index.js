@@ -9,6 +9,7 @@ const writeIndexFile = (original, isChild) => {
   let str = '';
   original.forEach((v) => {
     if (_.isObject(v)) {
+      //将子文件夹内容添加到外层index.js抛出
       // let subfile = writeIndexFile(v.children, true);
       // if (isChild) {
       //   res = res.concat(subfile)
