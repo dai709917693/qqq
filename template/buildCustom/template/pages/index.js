@@ -52,7 +52,7 @@ const queryDir = (arr, dir, vueTpl, parent, init) => {
       resArr.push(pathObj.name);
       if (init) {
         routerImp += `import ${pathObj.name} from '@/pages/${pathObj.name}';\n`
-        routeCont += `,{
+        routeCont += `, {
     path: '${parent}${pathObj.name}',
     name: '${pathObj.name}',
     component: ${pathObj.name}
@@ -68,7 +68,7 @@ const queryDir = (arr, dir, vueTpl, parent, init) => {
       routerImp += `import { ${indexContent.exportArr.join(', ')} } from '@/pages${parent}${pathObj.name}';\n`
       indexContent.exportArr.forEach((v) => {
         routeCont += `, {
-    path: '${parent}${v}',
+    path: '${parent}${pathObj.name}/${v}',
     name: '${v}',
     component: ${v}
   }`
