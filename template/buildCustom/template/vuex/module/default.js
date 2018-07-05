@@ -14,9 +14,10 @@ module.exports = (ajaxModule) => {
     }`
     })
   }
+  let ajaxImp = ajaxCont.slice(2) == '' ? '' : `import { ${ajaxCont.slice(2)} } from '@/ajax'`;
   let cont = `import {} from '../mutation-types.js'
 import { ${actionTypes.slice(2)} } from '../action-types.js'
-import { ${ajaxCont.slice(2)} } from '@/ajax'
+${ajaxImp}
 
 export default {
   namespaced: true,
