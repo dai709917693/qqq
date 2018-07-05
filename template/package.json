@@ -28,6 +28,7 @@
   "dependencies": {
     "vue": "^2.5.2"{{#router}},
     "vue-router": "^3.0.1"{{/router}},
+    "handlebars": "^4.0.11",
     "axios": "^0.17.1",
     "ua-device": "^0.1.10",
     "vue-loading-template": "^0.1.7",
