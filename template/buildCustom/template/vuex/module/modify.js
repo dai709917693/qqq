@@ -17,10 +17,10 @@ module.exports = (oldData, ajaxModule) => {
     },`
       }
     })
-    let exportIndex = newData.indexOf('export');
-
+    let exportIndex ;
     let actionTypesIndex = newData.indexOf('../action-types.js');
     if (actionTypesIndex == -1) {//添加默认代码
+      exportIndex = newData.indexOf('export');
       newData = newData.substring(0, exportIndex) + "import { } from '../action-types.js';\n" + newData.substring(exportIndex);
       actionTypesIndex = newData.indexOf('../action-types.js');
     }
@@ -28,6 +28,7 @@ module.exports = (oldData, ajaxModule) => {
 
     let ajaxIndex = newData.indexOf('@/ajax');
     if (ajaxIndex == -1) {
+      exportIndex = newData.indexOf('export');
       newData = newData.substring(0, exportIndex) + "import { } from '@/ajax';\n" + newData.substring(exportIndex);
       ajaxIndex = newData.indexOf('@/ajax');
     }
