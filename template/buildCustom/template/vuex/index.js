@@ -65,17 +65,26 @@ module.exports = (pagesData, ajaxData, folderAdd) => {
       ajaxModules[aVal.vuex].push(aVal.name)
     }
   })
-  let modules = [];
+  let modules = {};
+  //遍历ajax模块绑定的vuex
+  _.forEach(ajaxModules, (v, k) => {
+    modules[k] = true;
+    initModule(k, v, modulesAdd)
+  })
   pagesData.forEach((value) => {
     if (_.isUndefined(value.base)) {
       value.base = value.name + (value.ext ? value.ext : '')
     }
     let pathObj = path.parse(value.base);
-    modules.push(pathObj.name);
+    modules[pathObj.name] = true
     //创建modules
     initModule(pathObj.name, ajaxModules[pathObj.name], modulesAdd)
   });
-  initIndex(modules, folderAdd);
+  let modulesArr = [];
+  _.forEach(modules, (v, k) => {
+    modulesArr.push(k)
+  })
+  initIndex(modulesArr, folderAdd);
   initAction(ajaxModules, folderAdd);
   initMutation(folderAdd);
 }
