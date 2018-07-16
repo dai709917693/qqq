@@ -1,16 +1,16 @@
 const fs = require('fs');
 const path = require('path');
-const config = require('../config');
+const config = require('./config');
 
-const ajaxConfig = path.resolve(__dirname, '../config/ajax.json');
-const pagesConfig = path.resolve(__dirname, '../config/pages.json');
-const routerConfig = path.resolve(__dirname, '../config/router.json');
+const ajaxConfig = path.resolve(__dirname, './config/ajax.json');
+const pagesConfig = path.resolve(__dirname, './config/pages.json');
+const routerConfig = path.resolve(__dirname, './config/router.json');
 
-const initAjax = require('../template/ajax')
-const initPages = require('../template/pages');
-const initVuex = require('../template/vuex');
+const initAjax = require('./template/ajax')
+const initPages = require('./template/pages');
+const initVuex = require('./template/vuex');
 
-const vueTpl = fs.readFileSync(path.resolve(__dirname, '../template/tpl.vue'), { encoding: 'utf8' });
+const vueTpl = fs.readFileSync(path.resolve(__dirname, './template/tpl.vue'), { encoding: 'utf8' });
 //初始化ajax目录
 !fs.existsSync(config.ajaxSrc) && fs.mkdirSync(config.ajaxSrc);
 //初始化pages目录
