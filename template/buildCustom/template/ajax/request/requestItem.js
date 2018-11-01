@@ -1,7 +1,9 @@
-module.exports = (ajaxName, data) => {
+module.exports = (ajaxName, data, requestName) => {
   let isPost = data.method.toLocaleLowerCase() == 'post';
   let option;
   let params;
+  let urlPath = data['url']
+  delete data['url']
   if (isPost) {
     if (data['data']) {
       params = JSON.stringify(data['data'])
@@ -23,6 +25,12 @@ module.exports = (ajaxName, data) => {
       option = option.substring(0, option.length - 1) + ',params }'
     }
   }
-  return `export const ${ajaxName}_AJAX = (params) => {
-	return request(${option})\n};\n`
+  let variableUrl = 'url'
+  option = `{"url":${variableUrl}, ${option.substring(1)}`
+  return `export const ${ajaxName}_AJAX = (params, urlParams) => {
+	var ${variableUrl} = "${urlPath}";
+  urlParams && forEach(urlParams, (v, k)=>{
+    ${variableUrl} = ${variableUrl}.replace('{'+ k +'}', v)
+  })
+  return ${requestName}(${option})\n};\n`
 }

@@ -32,6 +32,7 @@
     "axios": "^0.17.1",
     "ua-device": "^0.1.10",
     "vue-loading-template": "^0.1.7",
+    "lodash": "4.17.5",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

@@ -9,7 +9,7 @@ module.exports = (data, folderAdd) => {
   if (fs.existsSync(reqAdd)) {
     reqContent = fs.readFileSync(reqAdd, { encoding: 'utf8' });
   } else {
-    reqContent = `import ${requestName} from '@/modules/${requestName}';\n`;
+    reqContent = `import ${requestName} from '@/modules/${requestName}';\nimport forEach from 'lodash/forEach';\n`;
   }
   data.forEach((value) => {
     if (reqContent.indexOf(value.url) == -1) {
@@ -21,7 +21,7 @@ module.exports = (data, folderAdd) => {
         ajaxName = path.parse(urlPath).name.toLocaleUpperCase();
       };
       !value.method && (value.method = 'get');
-      reqContent += requestItem(ajaxName, value)
+      reqContent += requestItem(ajaxName, value, requestName)
     }
   });
   fs.writeFileSync(reqAdd, reqContent)
